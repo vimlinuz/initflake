@@ -1,11 +1,15 @@
 {
   description = "A Nix-flake-based Bash development environment for bash";
-  inputs = { nixpkgs.url = "github:NixOS/nixpkgs?ref=nixos-unstable"; };
-  outputs = { self, nixpkgs }:
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs?ref=nixos-unstable";
+  };
+  outputs =
+    { self, nixpkgs }:
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs { inherit system; };
-    in {
+    in
+    {
       devShells.${system}.default = pkgs.mkShell {
         packages = [
           pkgs.bash

@@ -30,10 +30,10 @@
 
           pkgs.nodejs
           pkgs.pnpm
-          pkgs.nodePackages.typescript
-          pkgs.nodePackages.eslint
-          pkgs.nodePackages.prettier
-          pkgs.nodePackages.typescript-language-server
+          pkgs.typescript
+          pkgs.eslint
+          pkgs.prettier
+          pkgs.typescript-language-server
 
           pkgs.wasm-pack
           pkgs.rocmPackages.llvm.lld
