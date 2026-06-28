@@ -1,5 +1,5 @@
 {
-  description = "A Nix-flake-based Rust development environment (multi-system, flake-utils)";
+  description = "A Nix-flake-based Rust development environment";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs?ref=nixos-unstable";
