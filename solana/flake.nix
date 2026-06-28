@@ -50,18 +50,20 @@
 
         packages = [
           pkgs.openssl
+
           pkgs.cargo-watch
+          # GUI dialog tool for build notifications
+          pkgs.zenity
 
           pkgs.rust-bin.stable.latest.default # Stable rust, default profile. If not sure, always choose this.
           # rust-bin.beta.latest.default   # Wanna test beta compiler.
           # rust-bin.stable.latest.minimal # I don't need anything other than rustc, cargo, rust-std. Bye rustfmt, clippy, etc.
           # rust-bin.beta.latest.minimal
-          # GUI dialog tool for build notifications
-          pkgs.zenity
 
           pkgs.pnpm
           pkgs.yarn
           pkgs.prettier
+          pkgs.nodejs
         ];
 
         env.RUSTFLAGS = "-C link-arg=-Wl,-rpath,${nixpkgs.lib.makeLibraryPath runTimeDeps}";
