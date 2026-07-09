@@ -3,7 +3,7 @@ name: Update Nix Flakes
 on:
   workflow_dispatch: {}
   schedule:
-    - cron: "0 3 * * 1" # Every Monday 03:00 UTC
+    - cron: "0 3 * * *" # Daily at 03:00 UTC
 
 permissions:
   contents: write
@@ -44,20 +44,27 @@ jobs:
         run: echo "NEPAL_TIME=$(TZ=Asia/Kathmandu date +"%Y-%m-%d %H:%M:%S NPT")">>$GITHUB_ENV
 
       - name: Create Pull Request with updates
+        id: cpr
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          committer: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          author: ${{ github.actor }} <${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com>
           commit-message: "chore: update Nix flakes"
           title: "chore: update Nix flakes"
           body: |
             Automated flake input update.
             - Trigger: ${{ github.event_name }}
             - Time: ${{ env.NEPAL_TIME }}
-          assignees: santoshxshrestha
-          reviewers: santoshxshrestha
           branch: auto/update-flakes
           delete-branch: true
           add-paths: "**/flake.lock"
           labels: |
             automated
             nix
+
+      - name: Enable auto-merge
+        if: steps.cpr.outputs.pull-request-number != ''
+        run: gh pr merge --auto --squash "${{ steps.cpr.outputs.pull-request-number }}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
