@@ -5,13 +5,16 @@
     nixpkgs.url = "github:NixOS/nixpkgs?ref=nixos-unstable";
     naersk.url = "github:nix-community/naersk";
     rust-overlay.url = "github:oxalica/rust-overlay";
+    treefmt-nix.url = "github:numtide/treefmt-nix";
   };
 
   outputs =
     {
+      self,
       nixpkgs,
       naersk,
       rust-overlay,
+      treefmt-nix,
       ...
     }:
     let
@@ -21,6 +24,8 @@
       pkgs = import nixpkgs {
         inherit system overlays;
       };
+
+      treefmtEval = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
 
       naerskLib = pkgs.callPackage naersk { };
 
@@ -74,6 +79,9 @@
           export PATH="$HOME/.cargo/bin:$PATH"
         '';
       };
-      formatter = pkgs.rustfmt;
+      # for `nix fmt`
+      formatter.${system} = treefmtEval.config.build.wrapper;
+      # for `nix flake check`
+      checks.${system}.formatting = treefmtEval.config.build.check self;
     };
 }
