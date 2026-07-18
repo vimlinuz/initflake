@@ -4,14 +4,23 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs?ref=nixos-unstable";
     naersk.url = "github:nix-community/naersk";
+    treefmt-nix.url = "github:numtide/treefmt-nix";
   };
 
   outputs =
-    { nixpkgs, naersk, ... }:
+    {
+      self,
+      nixpkgs,
+      naersk,
+      treefmt-nix,
+      ...
+    }:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
       naerskLib = pkgs.callPackage naersk { };
+
+      treefmtEval = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
     in
     {
       packages.${system}.default = naerskLib.buildPackage {
@@ -44,6 +53,9 @@
         # env.RUST_SRC_PATH =
         #   "${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}";
       };
-      formatter = pkgs.rustfmt;
+      # for `nix fmt`
+      formatter.${system} = treefmtEval.config.build.wrapper;
+      # for `nix flake check`
+      checks.${system}.formatting = treefmtEval.config.build.check self;
     };
 }
