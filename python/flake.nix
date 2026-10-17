@@ -21,11 +21,13 @@
           pkgs.python3Packages.wheel
 
           # Development tools
-          pkgs.python3Packages.black
-          pkgs.python3Packages.flake8
+          # pkgs.python3Packages.black
+          # pkgs.python3Packages.flake8
+          # pkgs.python3Packages.isort
+
+          pkgs.python3Packages.ruff
           pkgs.python3Packages.mypy
           pkgs.python3Packages.pytest
-          pkgs.python3Packages.isort
 
           # Language server
           pkgs.python3Packages.python-lsp-server
