@@ -32,7 +32,9 @@
 
           # Common Python packages
           pkgs.python3Packages.requests
+
           pkgs.python3Packages.numpy
+          pkgs.python3Packages.matplotlib
           pkgs.python3Packages.pandas
         ];
 
